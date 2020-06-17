@@ -1,0 +1,123 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: austin-client-deployment
+  namespace: locally
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: austin-client
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: austin-client
+      namespace: locally
+    spec:
+      containers:
+        - image: austin-image:angular
+          imagePullPolicy: Always
+          name: angular
+          ports:
+            - containerPort: 8000
+              name: angular-http
+
+        - image: austin-image:jekyll
+          imagePullPolicy: Always
+          name: jekyll
+          ports:
+            - containerPort: 8100
+              name: jekyll-http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: austin-kernel-deployment
+  namespace: locally
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: austin-kernel
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: austin-kernel
+      namespace: locally
+    spec:
+      containers:
+        - image: grafana/grafana
+          imagePullPolicy: Always
+          name: grafana
+          ports:
+            - containerPort: 3000
+              name: grafana-http
+
+        - image: prom/prometheus
+          imagePullPolicy: Always
+          name: prometheus
+          ports:
+            - containerPort: 9090
+              name: prometheus-http
+
+        - image: openzipkin/zipkin-slim
+          imagePullPolicy: Always
+          name: zipkin
+          ports:
+            - containerPort: 9411
+              name: zipkin-http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: austin-server-deployment
+  namespace: locally
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: austin-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: austin-server
+      namespace: locally
+    spec:
+      containers:
+        - env:
+            - name: ConnectionStrings__pgsql
+              value: 'Host=postgres;Database=AustinData;Username=postgres;Password=secure_token;'
+          image: austin-image:aspnet
+          imagePullPolicy: Always
+          name: aspnet
+          ports:
+            - containerPort: 9000
+              name: aspnet-http
+
+        - env:
+            - name: POSTGRES_PASSWORD
+              value: secure_token
+          image: postgres:12
+          imagePullPolicy: Always
+          name: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres-tcp

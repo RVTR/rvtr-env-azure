@@ -1,0 +1,11 @@
+# excludes
+*
+
+# includes
+!**/_includes/
+!**/_layouts/
+!**/index.html
+
+!Gemfile*
+!Gemfile.lock
+!jekyll.config.yaml

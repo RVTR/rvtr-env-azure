@@ -1,0 +1,13 @@
+# dotnet
+bin/
+obj/
+
+# jekyll
+_site/
+.jekyll-cache/
+
+# nodejs
+node_modules/
+
+# terraform
+.terraform/

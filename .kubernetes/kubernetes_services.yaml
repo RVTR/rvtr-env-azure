@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular
+  namespace: locally
+spec:
+  ports:
+    - name: angular
+      port: 80
+      targetPort: angular-http
+  selector:
+    app: austin-client
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jekyll
+  namespace: locally
+spec:
+  ports:
+    - name: jekyll
+      port: 80
+      targetPort: jekyll-http
+  selector:
+    app: austin-client
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: locally
+spec:
+  ports:
+    - name: grafana
+      port: 3000
+      targetPort: grafana-http
+  selector:
+    app: austin-kernel
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: locally
+spec:
+  ports:
+    - name: prometheus
+      port: 9090
+      targetPort: prometheus-http
+  selector:
+    app: austin-kernel
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+  namespace: locally
+spec:
+  ports:
+    - name: zipkin
+      port: 9411
+      targetPort: zipkin-http
+  selector:
+    app: austin-kernel
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnet
+  namespace: locally
+spec:
+  ports:
+    - name: aspnet
+      port: 80
+      targetPort: aspnet-http
+  selector:
+    app: austin-server
+  type: ClusterIP

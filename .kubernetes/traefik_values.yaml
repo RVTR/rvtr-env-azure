@@ -1,0 +1,112 @@
+additionalArguments:
+  - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+  - --certificatesresolvers.letsencrypt.acme.email=hello@austin.com
+  - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
+  - --certificatesresolvers.letsencrypt.acme.tlschallenge
+  - --metrics=true
+  - --metrics.prometheus=true
+  - --metrics.prometheus.entryPoint=traefik
+  - --tracing=true
+  - --tracing.zipkin=true
+  - --tracing.zipkin.httpEndpoint=http://zipkin:9411/api/v2/spans
+
+affinity: {}
+
+autoscaling:
+  enabled: false
+
+deployment:
+  enabled: true
+  replicas: 1
+  annotations: {}
+  podAnnotations: {}
+
+env: []
+
+envFrom: []
+
+globalArguments:
+  - '--global.checknewversion'
+  - '--global.sendanonymoususage'
+
+hostNetwork: false
+
+image:
+  name: traefik
+  tag: 2.2.1
+
+ingressRoute:
+  dashboard:
+    enabled: false
+    annotations: {}
+    labels: {}
+
+nodeSelector: {}
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 128Mi
+  path: /data
+  annotations: {}
+
+podSecurityContext:
+  fsGroup: 65532
+
+ports:
+  grafana:
+    port: 3000
+    expose: true
+    exposedPort: 3000
+  http:
+    port: 8000
+    expose: true
+    exposedPort: 80
+  https:
+    port: 8443
+    expose: true
+    exposedPort: 443
+  prometheus:
+    port: 9090
+    expose: true
+    exposedPort: 9090
+  traefik:
+    port: 9000
+    expose: true
+    exposedPort: 9000
+  web: null
+  websecure: null
+  zipkin:
+    port: 9411
+    expose: true
+    exposedPort: 9411
+
+priorityClassName: ''
+
+resources: {}
+
+rollingUpdate:
+  maxUnavailable: 1
+  maxSurge: 1
+
+tolerations: []
+
+securityContext:
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsGroup: 65532
+  runAsNonRoot: true
+  runAsUser: 65532
+
+service:
+  enabled: true
+  type: LoadBalancer
+  annotations: {}
+  spec: {}
+  loadBalancerSourceRanges: []
+  externalIPs: []
+
+serviceAccountAnnotations: {}
+
+volumes: []

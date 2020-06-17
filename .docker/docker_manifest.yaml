@@ -1,0 +1,43 @@
+networks:
+  locally:
+
+services:
+  angular:
+    build:
+      context: ../angular
+      dockerfile: ../.docker/angular.dockerfile
+    networks:
+      - locally
+    ports:
+      - 8000:80
+
+  aspnet:
+    build:
+      context: ../aspnet
+      dockerfile: ../.docker/aspnet.dockerfile
+    depends_on:
+      - data
+    environment:
+      ConnectionStrings__pgsql: 'Host=postgres;Database=AustinData;Username:postgres;Password=secure_token;'
+    networks:
+      - locally
+    ports:
+      - 9000:80
+
+  jekyll:
+    build:
+      context: ../jekyll
+      dockerfile: ../.docker/jekyll.dockerfile
+    networks:
+      - locally
+    ports:
+      - 8100:80
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: secure_token
+    image: postgres:12
+    networks:
+      - locally
+
+version: '3.8'
