@@ -9,7 +9,7 @@ jobs:
       - name: actions_checkout
         uses: actions/checkout@v2.2.0
       - name: terraform_init
-        run: terraform init
+        run: terraform init --backend=false
       - name: terraform_validate
         run: terraform validate
 
