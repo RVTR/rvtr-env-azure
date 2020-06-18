@@ -2,24 +2,16 @@ jobs:
   build:
     defaults:
       run:
-        working-directory: jekyll
-    name: build_jekyll
+        working-directory: hashicorp
+    name: build_terraform
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.2.0
-      - name: ruby_install
-        uses: ruby/setup-ruby@v1.36.0
-        with:
-          ruby-version: 2.6
-      - name: npm_install
-        run: npm clean-install
-      - name: bundle_install
-        run: bundle install
-      - name: npm_build
-        run: npm run build
-      - name: jekyll_build
-        run: bundle exec jekyll build --config jekyll.config.yaml
+      - name: terraform_init
+        run: terraform init
+      - name: terraform_validate
+        run: terraform validate
 
 name: release
 
