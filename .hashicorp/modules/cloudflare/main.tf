@@ -1,4 +1,4 @@
-data "cloudflare_zones" "austin" {
+data "cloudflare_zones" "rvtr" {
   filter {
     name   = var.zones.name
     paused = false
@@ -6,11 +6,11 @@ data "cloudflare_zones" "austin" {
   }
 }
 
-resource "cloudflare_record" "austin" {
+resource "cloudflare_record" "rvtr" {
   name    = var.record.name
   proxied = false
   ttl     = 1
   type    = var.record.type
   value   = var.record.value
-  zone_id = lookup(data.cloudflare_zones.austin.zones[0], "id")
+  zone_id = lookup(data.cloudflare_zones.rvtr.zones[0], "id")
 }
