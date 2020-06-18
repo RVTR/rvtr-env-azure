@@ -13,5 +13,5 @@ module "cloudflare" {
 }
 
 terraform {
-  backend "local" {}
+  backend "remote" {}
 }
