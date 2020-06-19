@@ -8,7 +8,7 @@ spec:
     - analytics
   routes:
     - kind: Rule
-      match: PathPrefix('/')
+      match: PathPrefix(`/`)
       middlewares:
         - name: rvtr-auth
       priority: 10
