@@ -50,7 +50,7 @@ podSecurityContext:
   fsGroup: 65532
 
 ports:
-  grafana:
+  analytics:
     port: 3000
     expose: true
     exposedPort: 3000
@@ -62,20 +62,20 @@ ports:
     port: 8443
     expose: true
     exposedPort: 443
-  prometheus:
+  metrics:
     port: 9090
     expose: true
     exposedPort: 9090
+  tracing:
+    port: 9411
+    expose: true
+    exposedPort: 9411
   traefik:
     port: 9000
     expose: true
     exposedPort: 9000
   web: null
   websecure: null
-  zipkin:
-    port: 9411
-    expose: true
-    exposedPort: 9411
 
 priorityClassName: ''
 
