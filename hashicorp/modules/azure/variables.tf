@@ -3,6 +3,7 @@ variable "kubernetes_cluster" {
     dns_prefix                      = string
     kubernetes_version              = string
     name                            = string
+    node_resource_group = string
 
     default_node_pool = object({
       max_pods        = number

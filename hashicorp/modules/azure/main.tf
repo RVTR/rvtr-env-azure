@@ -3,6 +3,7 @@ resource "azurerm_kubernetes_cluster" "rvtr" {
   kubernetes_version              = var.kubernetes_cluster.kubernetes_version
   location                        = azurerm_resource_group.rvtr.location
   name                            = var.kubernetes_cluster.name
+  node_resource_group             = var.kubernetes_cluster.node_resource_group
   private_cluster_enabled         = false
   resource_group_name             = azurerm_resource_group.rvtr.name
 
