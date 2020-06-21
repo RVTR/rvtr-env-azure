@@ -99,7 +99,8 @@ service:
   enabled: true
   type: LoadBalancer
   annotations: {}
-  spec: {}
+  spec:
+    loadBalancerIP: ''
   loadBalancerSourceRanges: []
   externalIPs: []
 
