@@ -1,13 +1,11 @@
-variable "record" {
-  type = object({
-    name  = string
-    type  = string
-    value = string
-  })
+variable "record_name" {
+  type = string
 }
 
-variable "zones" {
-  type = object({
-    name = string
-  })
+variable "record_value" {
+  type = string
+}
+
+variable "zone_name" {
+  type = string
 }
