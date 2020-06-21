@@ -15,3 +15,5 @@ provider "azurerm" {
 provider "cloudflare" {
   version = "~>2.7.0"
 }
+
+provider "random" {}
