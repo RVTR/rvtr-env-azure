@@ -44,6 +44,20 @@ resource "azurerm_kubernetes_cluster" "rvtr" {
   }
 }
 
+resource "azurerm_public_ip" "rvtr" {
+  allocation_method = "Static"
+  domain_name_label = random_pet.rvtr.id
+  ip_version = "IPv4"
+  location = azurerm_resource_group.rvtr.location
+  name = var.public_ip.name
+  resource_group_name = azurerm_kubernetes_cluster.rvtr.node_resource_group
+  sku = "Basic"
+
+  tags = {
+    environment = var.public_ip.tags.environment
+  }
+}
+
 resource "azurerm_resource_group" "rvtr" {
   location = var.resource_group.location
   name     = var.resource_group.name
@@ -51,4 +65,9 @@ resource "azurerm_resource_group" "rvtr" {
   tags = {
     environment = var.resource_group.tags.environment
   }
+}
+
+resource "random_pet" "rvtr" {
+  length = 3
+  separator = "-"
 }

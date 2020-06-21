@@ -26,6 +26,16 @@ variable "kubernetes_cluster" {
   })
 }
 
+variable "public_ip" {
+  type = object({
+    name = string
+
+    tags = object({
+      environment = string
+    })
+  })
+}
+
 variable "resource_group" {
   type = object({
     location = string
