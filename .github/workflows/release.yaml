@@ -1,17 +1,26 @@
 jobs:
-  build:
+  plan:
     defaults:
       run:
         working-directory: hashicorp
-    name: build_terraform
+    name: plan_terraform
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.2.0
+      - name: terraform_setup
+        uses: hashicorp/setup-terraform@v1.1.0
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_version: 0.12.26
       - name: terraform_init
-        run: terraform init
+        run: terraform init --backend=backend.hcl
       - name: terraform_validate
         run: terraform validate
+      - name: terraform_workspace
+        run: terraform workspace select azure
+      - name: terraform_plan
+        run: terraform plan
 
 name: release
 

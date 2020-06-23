@@ -1,13 +1,21 @@
 jobs:
-  build:
+  validate:
     defaults:
       run:
         working-directory: hashicorp
-    name: build_terraform
+    name: validate_terraform
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.2.0
+      - name: terraform_setup
+        run: |
+          cat <<EOF > ~/.terraformrc
+          credentials "app.terraform.io" {
+            token = ${GITHUB_REF}
+          }
+      - name: terraform_config
+        run: cat ~/.terraformrc
       - name: terraform_init
         run: terraform init --backend=false
       - name: terraform_validate
