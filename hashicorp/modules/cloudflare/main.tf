@@ -8,7 +8,7 @@ data "cloudflare_zones" "rvtr" {
 
 resource "cloudflare_record" "rvtr" {
   name    = var.record_name
-  proxied = false
+  proxied = true
   ttl     = 1
   type    = "CNAME"
   value   = var.record_value
