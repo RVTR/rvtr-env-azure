@@ -7,11 +7,3 @@ spec:
   basicAuth:
     removeHeader: false
     secret: rvtr-auth
-
----
-apiVersion: v1
-data:
-  users: YWRtaW46JDJ5JDA1JHVBVVdLQi8zVVNqM1hORzd3SWp3RHVNZVBYekdxVUkua2pUeTc3Ljg1UnZJRTVMRWM3MDdhCg==
-kind: Secret
-metadata:
-  name: rvtr-auth
