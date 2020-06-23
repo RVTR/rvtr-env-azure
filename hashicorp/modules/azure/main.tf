@@ -1,12 +1,11 @@
-resource "azurerm_kubernetes_cluster" "austin" {
-  api_server_authorized_ip_ranges = var.kubernetes_cluster.api_server_authorized_ip_ranges
+resource "azurerm_kubernetes_cluster" "rvtr" {
   dns_prefix                      = var.kubernetes_cluster.dns_prefix
   kubernetes_version              = var.kubernetes_cluster.kubernetes_version
-  location                        = azurerm_resource_group.austin.location
+  location                        = azurerm_resource_group.rvtr.location
   name                            = var.kubernetes_cluster.name
   node_resource_group             = var.kubernetes_cluster.node_resource_group
   private_cluster_enabled         = false
-  resource_group_name             = azurerm_resource_group.austin.name
+  resource_group_name             = azurerm_resource_group.rvtr.name
 
   addon_profile {
     kube_dashboard {
@@ -20,7 +19,6 @@ resource "azurerm_kubernetes_cluster" "austin" {
     max_pods              = var.kubernetes_cluster.default_node_pool.max_pods
     name                  = var.kubernetes_cluster.default_node_pool.name
     node_count            = var.kubernetes_cluster.default_node_pool.node_count
-    os_disk_size_gb       = var.kubernetes_cluster.default_node_pool.os_disk_size_gb
     type                  = "VirtualMachineScaleSets"
     vm_size               = var.kubernetes_cluster.default_node_pool.vm_size
   }
@@ -42,15 +40,34 @@ resource "azurerm_kubernetes_cluster" "austin" {
   }
 
   tags = {
-    environment = var.kubernetes_cluster.tags.environment
+    environment = var.environment_definition.name
   }
 }
 
-resource "azurerm_resource_group" "austin" {
+resource "azurerm_public_ip" "rvtr" {
+  allocation_method = "Static"
+  domain_name_label = random_pet.rvtr.id
+  ip_version = "IPv4"
+  location = azurerm_resource_group.rvtr.location
+  name = var.public_ip.name
+  resource_group_name = azurerm_kubernetes_cluster.rvtr.node_resource_group
+  sku = "Basic"
+
+  tags = {
+    environment = var.environment_definition.name
+  }
+}
+
+resource "azurerm_resource_group" "rvtr" {
   location = var.resource_group.location
   name     = var.resource_group.name
 
   tags = {
-    environment = var.resource_group.tags.environment
+    environment = var.environment_definition.name
   }
+}
+
+resource "random_pet" "rvtr" {
+  length = 3
+  separator = "-"
 }

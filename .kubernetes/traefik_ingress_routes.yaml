@@ -2,49 +2,20 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: austin-client-ingress
-  namespace: locally
-spec:
-  entryPoints:
-    - web
-  routes:
-    - kind: Rule
-      match: PathPrefix(`/angular`)
-      priority: 10
-      services:
-        - kind: Service
-          name: austin-client-service
-          port: 80
-    - kind: Rule
-      match: PathPrefix(`/jekyll`)
-      priority: 20
-      services:
-        - kind: Service
-          name: austin-client-service
-          port: 80
-  tls:
-    certResolver: letsencrypt
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
   name: grafana
 spec:
   entryPoints:
     - analytics
   routes:
     - kind: Rule
-      match: PathPrefix('/')
+      match: PathPrefix(`/`)
       middlewares:
-        - name: austin-auth-middleware
+        - name: rvtr-auth
       priority: 10
       services:
         - kind: Service
           name: grafana
           port: 3000
-  tls:
-    certResolver: letsencrypt
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -58,14 +29,12 @@ spec:
     - kind: Rule
       match: PathPrefix(`/`)
       middlewares:
-        - name: austin-auth-middleware
+        - name: rvtr-auth
       priority: 10
       services:
         - kind: Service
           name: prometheus
           port: 9090
-  tls:
-    certResolver: letsencrypt
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -79,14 +48,12 @@ spec:
     - kind: Rule
       match: PathPrefix(`/zipkin`)
       middlewares:
-        - name: austin-auth-middleware
+        - name: rvtr-auth
       priority: 10
       services:
         - kind: Service
           name: zipkin
           port: 9411
-  tls:
-    certResolver: letsencrypt
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -100,29 +67,8 @@ spec:
     - kind: Rule
       match: PathPrefix(`/api`) || PathPrefix(`/dashboard`) || PathPrefix(`/metrics`)
       middlewares:
-        - name: austin-auth-middleware
+        - name: rvtr-auth
       priority: 10
       services:
         - kind: TraefikService
           name: api@internal
-  tls:
-    certResolver: letsencrypt
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: austin-server-ingress
-spec:
-  entryPoints:
-    - web
-  routes:
-    - kind: Rule
-      match: PathPrefix(`/aspnet`)
-      priority: 10
-      services:
-        - kind: Service
-          name: austin-server-service
-          port: 80
-  tls:
-    certResolver: letsencrypt

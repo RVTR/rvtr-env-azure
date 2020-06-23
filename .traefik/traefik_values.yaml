@@ -1,8 +1,7 @@
 additionalArguments:
-  - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-  - --certificatesresolvers.letsencrypt.acme.email=hello@austin.com
-  - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
-  - --certificatesresolvers.letsencrypt.acme.tlschallenge
+  - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+  - --certificatesresolvers.cloudflare.acme.email=email@address.com
+  - --certificatesresolvers.cloudflare.acme.storage=/data/acme.json
   - --metrics=true
   - --metrics.prometheus=true
   - --metrics.prometheus.entryPoint=traefik
@@ -23,7 +22,9 @@ deployment:
 
 env: []
 
-envFrom: []
+envFrom:
+  - secretRef:
+      name: rvtr-dns
 
 globalArguments:
   - '--global.checknewversion'
@@ -54,7 +55,7 @@ podSecurityContext:
   fsGroup: 65532
 
 ports:
-  grafana:
+  analytics:
     port: 3000
     expose: true
     exposedPort: 3000
@@ -66,20 +67,20 @@ ports:
     port: 8443
     expose: true
     exposedPort: 443
-  prometheus:
+  metrics:
     port: 9090
     expose: true
     exposedPort: 9090
+  tracing:
+    port: 9411
+    expose: true
+    exposedPort: 9411
   traefik:
     port: 9000
     expose: true
     exposedPort: 9000
   web: null
   websecure: null
-  zipkin:
-    port: 9411
-    expose: true
-    exposedPort: 9411
 
 priorityClassName: ''
 
@@ -103,7 +104,8 @@ service:
   enabled: true
   type: LoadBalancer
   annotations: {}
-  spec: {}
+  spec:
+    loadBalancerIP: ''
   loadBalancerSourceRanges: []
   externalIPs: []
 

@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~> 2.11.0"
+  version = "~>2.11.0"
 
   features {
     virtual_machine {
@@ -13,5 +13,9 @@ provider "azurerm" {
 }
 
 provider "cloudflare" {
-  version = "~> 2.7.0"
+  version = "~>2.7.0"
+}
+
+provider "random" {
+  version = "~>2.2.1"
 }

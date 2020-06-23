@@ -1,6 +1,6 @@
 hostname     = "app.terraform.io"
-organization = ""
+organization = "rvtr"
 
 workspaces {
-  prefix = ""
+  prefix = "rvtr-env-"
 }
