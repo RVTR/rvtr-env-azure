@@ -1,4 +1,5 @@
 # azure
+variable "azure_environment_definition" {}
 variable "azure_kubernetes_cluster" {}
 variable "azure_public_ip" {}
 variable "azure_resource_group" {}

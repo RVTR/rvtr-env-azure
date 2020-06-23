@@ -40,7 +40,7 @@ resource "azurerm_kubernetes_cluster" "rvtr" {
   }
 
   tags = {
-    environment = var.kubernetes_cluster.tags.environment
+    environment = var.environment_definition.name
   }
 }
 
@@ -54,7 +54,7 @@ resource "azurerm_public_ip" "rvtr" {
   sku = "Basic"
 
   tags = {
-    environment = var.public_ip.tags.environment
+    environment = var.environment_definition.name
   }
 }
 
@@ -63,7 +63,7 @@ resource "azurerm_resource_group" "rvtr" {
   name     = var.resource_group.name
 
   tags = {
-    environment = var.resource_group.tags.environment
+    environment = var.environment_definition.name
   }
 }
 

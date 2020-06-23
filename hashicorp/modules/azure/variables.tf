@@ -1,8 +1,14 @@
+variable "environment_definition" {
+  type = object({
+    name = string
+  })
+}
+
 variable "kubernetes_cluster" {
   type = object({
-    dns_prefix                      = string
-    kubernetes_version              = string
-    name                            = string
+    dns_prefix          = string
+    kubernetes_version  = string
+    name                = string
     node_resource_group = string
 
     default_node_pool = object({
@@ -19,20 +25,12 @@ variable "kubernetes_cluster" {
         key_data = string
       })
     })
-
-    tags = object({
-      environment = string
-    })
   })
 }
 
 variable "public_ip" {
   type = object({
     name = string
-
-    tags = object({
-      environment = string
-    })
   })
 }
 
@@ -40,9 +38,5 @@ variable "resource_group" {
   type = object({
     location = string
     name     = string
-
-    tags = object({
-      environment = string
-    })
   })
 }
