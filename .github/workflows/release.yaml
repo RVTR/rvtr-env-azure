@@ -1,5 +1,5 @@
 jobs:
-  apply:
+  plan:
     defaults:
       run:
         working-directory: hashicorp
@@ -23,8 +23,6 @@ jobs:
         run: terraform validate
       - name: terraform_plan
         run: terraform plan
-      - name: terraform_apply
-        run: terraform apply --auto-approve
 
 name: release
 
