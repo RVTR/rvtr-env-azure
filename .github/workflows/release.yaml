@@ -3,6 +3,8 @@ jobs:
     defaults:
       run:
         working-directory: hashicorp
+    env:
+      TF_WORKSPACE: azure
     name: plan_terraform
     runs-on: ubuntu-18.04
     steps:
@@ -14,7 +16,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_version: 0.12.26
       - name: terraform_init
-        run: printf '1\n' | terraform init --backend-config=backend.hcl
+        run: terraform init --backend-config=backend.hcl
       - name: terraform_workspace
         run: terraform workspace select azure
       - name: terraform_validate
