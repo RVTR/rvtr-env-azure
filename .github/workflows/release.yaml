@@ -17,8 +17,6 @@ jobs:
           terraform_version: 0.12.26
       - name: terraform_init
         run: terraform init --backend-config=backend.hcl
-      - name: terraform_workspace
-        run: terraform workspace select azure
       - name: terraform_validate
         run: terraform validate
       - name: terraform_plan
