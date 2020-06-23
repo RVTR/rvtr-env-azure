@@ -16,4 +16,6 @@ provider "cloudflare" {
   version = "~>2.7.0"
 }
 
-provider "random" {}
+provider "random" {
+  version = "~>2.2.1"
+}
