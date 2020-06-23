@@ -1,5 +1,5 @@
 jobs:
-  plan:
+  apply:
     defaults:
       run:
         working-directory: hashicorp
@@ -21,6 +21,8 @@ jobs:
         run: terraform workspace select azure
       - name: terraform_plan
         run: terraform plan
+      - name: terraform_apply
+        run: terraform apply --auto-approve
 
 name: release
 
