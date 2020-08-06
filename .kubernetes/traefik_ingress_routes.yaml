@@ -21,6 +21,29 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
+  name: http
+spec:
+  entryPoints:
+    - http
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/`)
+      priority: 10
+      services:
+        - kind: Service
+          name: account
+          port: 80
+        - kind: Service
+          name: booking
+          port: 80
+        - kind: Service
+          name: lodging
+          port: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
   name: prometheus
 spec:
   entryPoints:
