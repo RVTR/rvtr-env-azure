@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning][semver].
 
 ## [unreleased]
 
+- configure the http ingress route definition
+
 ## [0.0.0] :: 2020-06-24
 
 ### added
