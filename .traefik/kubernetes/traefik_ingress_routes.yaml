@@ -8,7 +8,7 @@ spec:
     - analytics
   routes:
     - kind: Rule
-      match: PathPrefix(`/`)
+      match: (Host(`analytics.rvtr.net`) || Host(`mac.analytics.rvtr.net`)) && PathPrefix(`/`)
       middlewares:
         - name: rvtr-auth
       priority: 10
@@ -16,29 +16,81 @@ spec:
         - kind: Service
           name: grafana
           port: 3000
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: analytics.rvtr.net
+        sans:
+          - '*.analytics.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: http
+  name: account
 spec:
   entryPoints:
-    - http
+    - https
   routes:
     - kind: Rule
-      match: PathPrefix(`/`)
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/account`)
       priority: 10
       services:
         - kind: Service
           name: account
           port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: booking
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/booking`)
+      priority: 10
+      services:
         - kind: Service
           name: booking
           port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: lodging
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/lodging`)
+      priority: 10
+      services:
         - kind: Service
           name: lodging
           port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -50,7 +102,7 @@ spec:
     - metrics
   routes:
     - kind: Rule
-      match: PathPrefix(`/`)
+      match: (Host(`metrics.rvtr.net`) || Host(`mac.metrics.rvtr.net`)) && PathPrefix(`/`)
       middlewares:
         - name: rvtr-auth
       priority: 10
@@ -58,6 +110,12 @@ spec:
         - kind: Service
           name: prometheus
           port: 9090
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: metrics.rvtr.net
+        sans:
+          - '*.metrics.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -69,7 +127,7 @@ spec:
     - tracing
   routes:
     - kind: Rule
-      match: PathPrefix(`/zipkin`)
+      match: (Host(`tracing.rvtr.net`) || Host(`mac.tracing.rvtr.net`)) && PathPrefix(`/`)
       middlewares:
         - name: rvtr-auth
       priority: 10
@@ -77,6 +135,12 @@ spec:
         - kind: Service
           name: zipkin
           port: 9411
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: tracing.rvtr.net
+        sans:
+          - '*.tracing.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -88,10 +152,16 @@ spec:
     - traefik
   routes:
     - kind: Rule
-      match: PathPrefix(`/api`) || PathPrefix(`/dashboard`) || PathPrefix(`/metrics`)
+      match: (Host(`traefik.rvtr.net`) || Host(`mac.traefik.rvtr.net`)) && PathPrefix(`/`)
       middlewares:
         - name: rvtr-auth
       priority: 10
       services:
         - kind: TraefikService
           name: api@internal
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: traefik.rvtr.net
+        sans:
+          - '*.traefik.rvtr.net'
