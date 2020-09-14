@@ -4,17 +4,17 @@ jobs:
       run:
         working-directory: hashicorp
     env:
-      TF_WORKSPACE: azure-dev
+      TF_WORKSPACE: azure
     name: plan_terraform
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: actions_checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v2.3.2
       - name: terraform_setup
-        uses: hashicorp/setup-terraform@v1.1.0
+        uses: hashicorp/setup-terraform@v1.2.0
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_version: 0.12.26
+          terraform_version: 0.13.2
       - name: terraform_init
         run: terraform init --backend-config=backend.hcl
       - name: terraform_validate
@@ -27,6 +27,6 @@ name: release
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - '*'
