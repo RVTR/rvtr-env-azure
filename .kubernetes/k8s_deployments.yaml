@@ -25,6 +25,10 @@ spec:
           ports:
             - containerPort: 3000
               name: grafana-http
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
 
         - image: prom/prometheus
           imagePullPolicy: Always
@@ -32,6 +36,10 @@ spec:
           ports:
             - containerPort: 9090
               name: prometheus-http
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
           volumeMounts:
             - name: prometheus-config
               mountPath: /etc/prometheus/
@@ -42,6 +50,10 @@ spec:
           ports:
             - containerPort: 9411
               name: zipkin-http
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
 
       volumes:
         - name: prometheus-config
