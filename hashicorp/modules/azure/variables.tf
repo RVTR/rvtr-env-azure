@@ -40,3 +40,16 @@ variable "resource_group" {
     name     = string
   })
 }
+
+variable "storage_account" {
+  type = object({
+    kind = string
+    name = string
+  })
+}
+
+variable "storage_container" {
+  type = object({
+    directories = list(string)
+  })
+}
