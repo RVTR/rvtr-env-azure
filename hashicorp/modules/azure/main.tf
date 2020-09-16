@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "rvtr" {
   location            = azurerm_resource_group.rvtr.location
   name                = var.public_ip.name
   resource_group_name = azurerm_kubernetes_cluster.rvtr.node_resource_group
-  sku                 = "Basic"
+  sku                 = "Standard"
 
   tags = {
     environment = var.environment_definition.name
