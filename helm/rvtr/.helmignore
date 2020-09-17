@@ -1,0 +1,7 @@
+# exclusions
+*
+
+# inclusions
+*.tpl
+*.txt
+*.yaml

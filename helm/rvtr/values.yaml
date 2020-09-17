@@ -1,0 +1,49 @@
+affinity: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ''
+
+imagePullSecrets: []
+
+nameOverride: ''
+
+fullnameOverride: ''
+
+ingress:
+  annotations: {}
+  enabled: false
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+
+nodeSelector: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+replicaCount: 1
+
+resources: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ''
+
+tolerations: []
