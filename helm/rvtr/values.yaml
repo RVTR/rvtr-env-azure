@@ -6,16 +6,16 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
 
+fullnameOverride: ''
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
   tag: latest
 
+imagePullPolicy: Always
+
 imagePullSecrets: []
-
-nameOverride: ''
-
-fullnameOverride: ''
 
 ingress:
   annotations: {}
@@ -24,6 +24,8 @@ ingress:
     - host: chart-example.local
       paths: []
   tls: []
+
+nameOverride: ''
 
 nodeSelector: {}
 

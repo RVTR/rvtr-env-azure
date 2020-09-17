@@ -10,6 +10,7 @@ additionalArguments:
   - --tracing=true
   - --tracing.zipkin=true
   - --tracing.zipkin.httpEndpoint=http://zipkin:9411/api/v2/spans
+  - --tracing.zipkin.sameSpan=true
 
 affinity: {}
 
@@ -36,7 +37,7 @@ hostNetwork: false
 
 image:
   name: traefik
-  tag: 2.2.8
+  tag: 2.2.11
 
 ingressRoute:
   dashboard:
