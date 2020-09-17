@@ -10,10 +10,8 @@ fullnameOverride: ''
 
 image:
   repository: nginx
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: latest
-
-imagePullPolicy: Always
 
 imagePullSecrets: []
 

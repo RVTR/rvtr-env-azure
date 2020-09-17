@@ -20,14 +20,14 @@ spec:
     spec:
       containers:
         - image: grafana/grafana
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: grafana
           ports:
             - containerPort: 3000
               name: grafana-http
 
         - image: prom/prometheus
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: prometheus
           ports:
             - containerPort: 9090
@@ -37,7 +37,7 @@ spec:
               mountPath: /etc/prometheus/
 
         - image: openzipkin/zipkin-slim
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: zipkin
           ports:
             - containerPort: 9411
