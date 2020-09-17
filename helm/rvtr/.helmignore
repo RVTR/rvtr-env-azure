@@ -1,7 +1,2 @@
-# exclusions
-*
-
-# inclusions
-*.tpl
-*.txt
-*.yaml
+# macos
+.DS_Store
