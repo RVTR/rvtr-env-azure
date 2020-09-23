@@ -19,12 +19,25 @@ spec:
         app: rvtr-kernel
     spec:
       containers:
-        - image: grafana/grafana
+        - env:
+            - name: GF_AUTH_PROXY_AUTO_SIGN_UP
+              value: 'true'
+            - name: GF_AUTH_PROXY_ENABLED
+              value: 'true'
+            - name: GF_AUTH_PROXY_HEADER_NAME
+              value: X-Forwarded-User
+            - name: GF_AUTH_PROXY_HEADER_PROPERTY
+              value: username
+          image: grafana/grafana
           imagePullPolicy: Always
           name: grafana
           ports:
             - containerPort: 3000
               name: grafana-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
 
         - image: prom/prometheus
           imagePullPolicy: Always
@@ -32,6 +45,10 @@ spec:
           ports:
             - containerPort: 9090
               name: prometheus-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
           volumeMounts:
             - name: prometheus-config
               mountPath: /etc/prometheus/
@@ -42,6 +59,10 @@ spec:
           ports:
             - containerPort: 9411
               name: zipkin-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
 
       volumes:
         - name: prometheus-config
