@@ -1,15 +1,41 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "rvtr.fullname" . }}
-  labels:
-    {{- include "rvtr.labels" . | nindent 4 }}
+  name: grafana
 spec:
-  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - name: grafana
+      port: 3000
+      targetPort: grafana-http
   selector:
-    {{- include "rvtr.selectorLabels" . | nindent 4 }}
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+spec:
+  ports:
+    - name: prometheus
+      port: 9090
+      targetPort: prometheus-http
+  selector:
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+spec:
+  ports:
+    - name: zipkin
+      port: 9411
+      targetPort: zipkin-http
+  selector:
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}

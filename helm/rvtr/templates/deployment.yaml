@@ -1,61 +1,70 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rvtr.fullname" . }}
-  labels:
-    {{- include "rvtr.labels" . | nindent 4 }}
+  name: {{ .Release.Name }}-kernel
 spec:
-{{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-{{- end }}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "rvtr.selectorLabels" . | nindent 6 }}
+      app: {{ .Release.Name }}-kernel
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
       labels:
-        {{- include "rvtr.selectorLabels" . | nindent 8 }}
+        app: {{ .Release.Name }}-kernel
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "rvtr.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - env:
+            - name: GF_AUTH_PROXY_AUTO_SIGN_UP
+              value: 'true'
+            - name: GF_AUTH_PROXY_ENABLED
+              value: 'true'
+            - name: GF_AUTH_PROXY_HEADER_NAME
+              value: X-Forwarded-User
+            - name: GF_AUTH_PROXY_HEADER_PROPERTY
+              value: username
+          image: grafana/grafana
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: grafana
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - containerPort: 3000
+              name: grafana-http
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
+
+        - image: prom/prometheus
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: prometheus
+          ports:
+            - containerPort: 9090
+              name: prometheus-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
+          volumeMounts:
+            - name: prometheus-config
+              mountPath: /etc/prometheus/
+
+        - image: openzipkin/zipkin-slim
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: zipkin
+          ports:
+            - containerPort: 9411
+              name: zipkin-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
+
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: {{ .Release.Name }}-prometheus

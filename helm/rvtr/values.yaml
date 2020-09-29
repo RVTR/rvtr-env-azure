@@ -35,6 +35,9 @@ replicaCount: 1
 
 resources: {}
 
+secrets:
+  cloudflare: ''
+
 securityContext: {}
 
 service:
