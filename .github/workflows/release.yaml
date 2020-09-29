@@ -19,7 +19,7 @@ jobs:
         working-directory: hashicorp
     env:
       TF_WORKSPACE: azure
-    name: plan_terraform
+    name: plan_hashicorp
     runs-on: ubuntu-20.04
     steps:
       - name: actions_checkout
@@ -40,7 +40,7 @@ jobs:
     defaults:
       run:
         working-directory: helm/rvtr
-    name: build_aspnet
+    name: validate_helm
     runs-on: ubuntu-20.04
     steps:
       - name: actions_checkout
