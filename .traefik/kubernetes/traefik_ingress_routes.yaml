@@ -9,6 +9,8 @@ spec:
   routes:
     - kind: Rule
       match: (Host(`analytics.rvtr.net`) || Host(`mac.analytics.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
       priority: 10
       services:
         - kind: Service
@@ -101,6 +103,8 @@ spec:
   routes:
     - kind: Rule
       match: (Host(`metrics.rvtr.net`) || Host(`mac.metrics.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
       priority: 10
       services:
         - kind: Service
@@ -124,6 +128,8 @@ spec:
   routes:
     - kind: Rule
       match: (Host(`tracing.rvtr.net`) || Host(`mac.tracing.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
       priority: 10
       services:
         - kind: Service
@@ -147,6 +153,8 @@ spec:
   routes:
     - kind: Rule
       match: (Host(`traefik.rvtr.net`) || Host(`mac.traefik.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
       priority: 10
       services:
         - kind: TraefikService

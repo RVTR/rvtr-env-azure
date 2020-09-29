@@ -1,0 +1,10 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: idaas
+spec:
+  forwardAuth:
+    address: http://idaas/forward/auth
+    authResponseHeaders:
+      - X-Forwarded-User

@@ -29,7 +29,7 @@ env: []
 
 envFrom:
   - secretRef:
-      name: rvtr-dns
+      name: rvtr-cloudflare
 
 globalArguments:
   - --global.checknewversion
