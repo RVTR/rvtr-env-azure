@@ -16,6 +16,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: idaas
+spec:
+  ports:
+    - name: idaas
+      port: 80
+      targetPort: idaas-http
+  selector:
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: prometheus
 spec:
   ports:

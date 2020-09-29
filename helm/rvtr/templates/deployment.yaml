@@ -39,6 +39,17 @@ spec:
               cpu: '250m'
               memory: '128Mi'
 
+        - image: rvtr/traefik-idaas
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: idaas
+          ports:
+            - containerPort: 80
+              name: idaas-http
+          resources:
+            limits:
+              cpu: '250m'
+              memory: '128Mi'
+
         - image: prom/prometheus
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: prometheus
