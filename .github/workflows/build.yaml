@@ -1,5 +1,19 @@
 jobs:
-  validate:
+  build_aspnet:
+    defaults:
+      run:
+        working-directory: aspnet
+    name: build_aspnet
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: dotnet_restore
+        run: dotnet restore
+      - name: dotnet_build
+        run: dotnet build --no-restore
+
+  validate_hashicorp:
     defaults:
       run:
         working-directory: hashicorp
@@ -16,6 +30,18 @@ jobs:
         run: terraform init --backend=false
       - name: terraform_validate
         run: terraform validate
+
+  validate_helm:
+    defaults:
+      run:
+        working-directory: helm/rvtr
+    name: build_aspnet
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: helm_lint
+        run: helm lint
 
 name: build
 
