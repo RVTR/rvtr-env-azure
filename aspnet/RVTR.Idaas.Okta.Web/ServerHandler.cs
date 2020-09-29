@@ -16,7 +16,7 @@ namespace RVTR.Idaas.Okta.Web
     /// <returns></returns>
     public async Task UseTraefik(HttpContext context)
     {
-      context.Response.Headers.Add("X-Forwarded", "RVTR");
+      context.Response.Headers.Add("X-Forwarded-User", "RVTR");
       context.Response.StatusCode = StatusCodes.Status200OK;
 
       await context.Response.WriteAsync(string.Empty);
