@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Primitives;
 
 namespace RVTR.Idaas.Okta.Web
 {
@@ -19,7 +20,7 @@ namespace RVTR.Idaas.Okta.Web
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDistributedMemoryCache();
-      services.AddSingleton<ServerHandler>();
+      services.AddSingleton<HttpHandler>();
 
       services.AddSession(options =>
       {
@@ -27,7 +28,7 @@ namespace RVTR.Idaas.Okta.Web
         options.Cookie.IsEssential = true;
         options.Cookie.Name = "rvtr_idaas";
         options.Cookie.SameSite = SameSiteMode.None;
-        options.IdleTimeout = new TimeSpan(0, 10, 0);
+        options.IdleTimeout = new TimeSpan(0, 15, 0);
         options.IOTimeout = new TimeSpan(0, 1, 0);
       });
     }
@@ -37,7 +38,7 @@ namespace RVTR.Idaas.Okta.Web
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="handler"></param>
-    public void Configure(IApplicationBuilder builder, ServerHandler handler)
+    public void Configure(IApplicationBuilder builder, HttpHandler handler)
     {
       builder.UseSession();
       builder.UseRouting();
@@ -48,9 +49,25 @@ namespace RVTR.Idaas.Okta.Web
         await next();
       });
 
+      builder.Use(async (ctx, next) =>
+      {
+        if (!ctx.Session.Keys.Contains("state") && ctx.Request.Headers.TryGetValue("X-Forwarded-Host", out StringValues forwardedHost))
+        {
+          ctx.Session.SetString("state", $"{ctx.Request.Headers["X-Forwarded-Proto"]}://{ctx.Request.Headers["X-Forwarded-Host"]}{ctx.Request.Headers["X-Forwarded-Uri"]}");
+        }
+
+        if (!ctx.Session.Keys.Contains("state"))
+        {
+          ctx.Session.SetString("state", $"{ctx.Request.Scheme}://{ctx.Request.Host.Value}{ctx.Request.Path}");
+        }
+
+        await next();
+      });
+
       builder.UseEndpoints(endpoints =>
       {
-        endpoints.MapGet("/forward/auth", handler.UseTraefik);
+        endpoints.Map("/", handler.UseTraefik);
+        endpoints.Map("/forward/auth", handler.UseOkta);
       });
     }
   }
