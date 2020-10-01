@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 
 namespace RVTR.Idaas.Okta.Web
@@ -51,14 +47,15 @@ namespace RVTR.Idaas.Okta.Web
 
       builder.Use(async (ctx, next) =>
       {
-        if (!ctx.Session.Keys.Contains("state") && ctx.Request.Headers.TryGetValue("X-Forwarded-Host", out StringValues forwardedHost))
+        if (ctx.Request.Headers.TryGetValue("X-Forwarded-Host", out StringValues forwardedHost))
         {
-          ctx.Session.SetString("state", $"{ctx.Request.Headers["X-Forwarded-Proto"]}://{ctx.Request.Headers["X-Forwarded-Host"]}{ctx.Request.Headers["X-Forwarded-Uri"]}");
+          ctx.Items.Add("path", $"{ctx.Request.Headers["X-Forwarded-Uri"]}");
+          ctx.Items.Add("root", $"{ctx.Request.Headers["X-Forwarded-Proto"]}://{ctx.Request.Headers["X-Forwarded-Host"]}");
         }
 
         if (!ctx.Session.Keys.Contains("state"))
         {
-          ctx.Session.SetString("state", $"{ctx.Request.Scheme}://{ctx.Request.Host.Value}{ctx.Request.Path}");
+          ctx.Session.SetString("state", Guid.NewGuid().ToString("N"));
         }
 
         await next();
@@ -66,8 +63,8 @@ namespace RVTR.Idaas.Okta.Web
 
       builder.UseEndpoints(endpoints =>
       {
-        endpoints.Map("/", handler.UseTraefik);
-        endpoints.Map("/forward/auth", handler.UseOkta);
+        endpoints.Map("/forward", handler.UseTraefik);
+        endpoints.Map("/redirect", handler.UseOkta);
       });
     }
   }
