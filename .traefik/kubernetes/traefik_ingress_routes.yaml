@@ -27,70 +27,24 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: account
+  name: idaas
 spec:
   entryPoints:
     - https
   routes:
     - kind: Rule
-      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/account`)
+      match: (Host(`identity.rvtr.net`) || Host(`mac.identity.rvtr.net`)) && PathPrefix(`/`)
       priority: 10
       services:
         - kind: Service
-          name: account
+          name: idaas
           port: 80
   tls:
     certResolver: cloudflare
     domains:
-      - main: api.rvtr.net
+      - main: identity.rvtr.net
         sans:
-          - '*.api.rvtr.net'
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: booking
-spec:
-  entryPoints:
-    - https
-  routes:
-    - kind: Rule
-      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/booking`)
-      priority: 10
-      services:
-        - kind: Service
-          name: booking
-          port: 80
-  tls:
-    certResolver: cloudflare
-    domains:
-      - main: api.rvtr.net
-        sans:
-          - '*.api.rvtr.net'
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: lodging
-spec:
-  entryPoints:
-    - https
-  routes:
-    - kind: Rule
-      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/lodging`)
-      priority: 10
-      services:
-        - kind: Service
-          name: lodging
-          port: 80
-  tls:
-    certResolver: cloudflare
-    domains:
-      - main: api.rvtr.net
-        sans:
-          - '*.api.rvtr.net'
+          - '*.identity.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -165,3 +119,72 @@ spec:
       - main: traefik.rvtr.net
         sans:
           - '*.traefik.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: account
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/account`)
+      priority: 10
+      services:
+        - kind: Service
+          name: account
+          port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: booking
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/booking`)
+      priority: 10
+      services:
+        - kind: Service
+          name: booking
+          port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: lodging
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`api.rvtr.net`) || Host(`mac.api.rvtr.net`)) && PathPrefix(`/rest/lodging`)
+      priority: 10
+      services:
+        - kind: Service
+          name: lodging
+          port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: api.rvtr.net
+        sans:
+          - '*.api.rvtr.net'

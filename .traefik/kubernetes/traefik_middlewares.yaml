@@ -5,6 +5,6 @@ metadata:
   name: idaas
 spec:
   forwardAuth:
-    address: http://idaas/forward/auth
+    address: http://idaas/forward
     authResponseHeaders:
       - X-Forwarded-User
