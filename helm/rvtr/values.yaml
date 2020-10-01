@@ -50,3 +50,9 @@ serviceAccount:
   name: ''
 
 tolerations: []
+
+variables:
+  idaas:
+    clientId: ''
+    provider: ''
+    redirectUri: ''

@@ -39,7 +39,16 @@ spec:
               cpu: '250m'
               memory: '128Mi'
 
-        - image: rvtr/traefik-idaas
+        - env:
+            {{- with .Values.variables.idaas }}
+            - name: IDAAS__ClientId
+              value: {{ .clientId }}
+            - name: IDAAS__Provider
+              value: {{ .provider }}
+            - name: IDAAS__RedirectUri
+              value: {{ .redirectUri }}
+            {{- end }}
+          image: rvtr/traefik-idaas
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: idaas
           ports:
@@ -73,7 +82,7 @@ spec:
           resources:
             limits:
               cpu: '250m'
-              memory: '128Mi'
+              memory: '256Mi'
 
       volumes:
         - name: prometheus-config
