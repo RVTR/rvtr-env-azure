@@ -1,4 +1,5 @@
 # dotnet
+.vscode/
 bin/
 obj/
 
