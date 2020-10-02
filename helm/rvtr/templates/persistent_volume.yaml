@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-azure
+spec:
+  accessModes:
+    - ReadWriteMany
+  azureFile:
+    readOnly: false
+    secretName: {{ .Release.Name }}-azure
+    shareName: {{ .Values.volumes.azure.name }}
+  capacity:
+    storage: {{ .Values.volumes.azure.storage }}
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azure
+  volumeMode: Filesystem

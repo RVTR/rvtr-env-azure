@@ -1,0 +1,24 @@
+image:
+  pullPolicy: Always
+
+secrets:
+  cloudflare: ''
+
+service:
+  type: ClusterIP
+
+variables:
+  grafana:
+    proxyAutoSignUp: 'true'
+    proxyEnabled: 'true'
+    proxyHeaderName: X-Forwarded-User
+    proxyHeaderProperty: username
+  idaas:
+    clientId: ''
+    provider: ''
+    redirectUri: ''
+
+volumes:
+  azure:
+    name: ''
+    storage: ''

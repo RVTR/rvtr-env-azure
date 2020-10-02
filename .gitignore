@@ -1,4 +1,5 @@
 # dotnet
+.vscode/
 bin/
 obj/
 
@@ -6,10 +7,11 @@ obj/
 _site/
 .jekyll-cache/
 
+# macos
+.DS_Store
+
 # nodejs
 node_modules/
 
 # terraform
 .terraform/
-
-*.auto.tfvars

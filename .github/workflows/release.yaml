@@ -1,20 +1,34 @@
 jobs:
-  plan:
+  build_aspnet:
+    defaults:
+      run:
+        working-directory: aspnet
+    name: build_aspnet
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: dotnet_restore
+        run: dotnet restore
+      - name: dotnet_build
+        run: dotnet build --no-restore
+
+  plan_hashicorp:
     defaults:
       run:
         working-directory: hashicorp
     env:
-      TF_WORKSPACE: azure-dev
-    name: plan_terraform
-    runs-on: ubuntu-18.04
+      TF_WORKSPACE: azure
+    name: plan_hashicorp
+    runs-on: ubuntu-20.04
     steps:
       - name: actions_checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v2.3.2
       - name: terraform_setup
-        uses: hashicorp/setup-terraform@v1.1.0
+        uses: hashicorp/setup-terraform@v1.2.0
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_version: 0.12.26
+          terraform_version: 0.13.2
       - name: terraform_init
         run: terraform init --backend-config=backend.hcl
       - name: terraform_validate
@@ -22,11 +36,23 @@ jobs:
       - name: terraform_plan
         run: terraform plan
 
+  validate_helm:
+    defaults:
+      run:
+        working-directory: helm/rvtr
+    name: validate_helm
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: helm_lint
+        run: helm lint
+
 name: release
 
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - '*'

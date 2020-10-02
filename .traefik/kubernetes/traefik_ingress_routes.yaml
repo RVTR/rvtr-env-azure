@@ -10,7 +10,7 @@ spec:
     - kind: Rule
       match: (Host(`analytics.rvtr.net`) || Host(`mac.analytics.rvtr.net`)) && PathPrefix(`/`)
       middlewares:
-        - name: rvtr-auth
+        - name: idaas
       priority: 10
       services:
         - kind: Service
@@ -22,6 +22,103 @@ spec:
       - main: analytics.rvtr.net
         sans:
           - '*.analytics.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: idaas
+spec:
+  entryPoints:
+    - https
+  routes:
+    - kind: Rule
+      match: (Host(`identity.rvtr.net`) || Host(`mac.identity.rvtr.net`)) && PathPrefix(`/`)
+      priority: 10
+      services:
+        - kind: Service
+          name: idaas
+          port: 80
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: identity.rvtr.net
+        sans:
+          - '*.identity.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus
+spec:
+  entryPoints:
+    - metrics
+  routes:
+    - kind: Rule
+      match: (Host(`metrics.rvtr.net`) || Host(`mac.metrics.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
+      priority: 10
+      services:
+        - kind: Service
+          name: prometheus
+          port: 9090
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: metrics.rvtr.net
+        sans:
+          - '*.metrics.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: zipkin
+spec:
+  entryPoints:
+    - tracing
+  routes:
+    - kind: Rule
+      match: (Host(`tracing.rvtr.net`) || Host(`mac.tracing.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
+      priority: 10
+      services:
+        - kind: Service
+          name: zipkin
+          port: 9411
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: tracing.rvtr.net
+        sans:
+          - '*.tracing.rvtr.net'
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik
+spec:
+  entryPoints:
+    - traefik
+  routes:
+    - kind: Rule
+      match: (Host(`traefik.rvtr.net`) || Host(`mac.traefik.rvtr.net`)) && PathPrefix(`/`)
+      middlewares:
+        - name: idaas
+      priority: 10
+      services:
+        - kind: TraefikService
+          name: api@internal
+  tls:
+    certResolver: cloudflare
+    domains:
+      - main: traefik.rvtr.net
+        sans:
+          - '*.traefik.rvtr.net'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -91,77 +188,3 @@ spec:
       - main: api.rvtr.net
         sans:
           - '*.api.rvtr.net'
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: prometheus
-spec:
-  entryPoints:
-    - metrics
-  routes:
-    - kind: Rule
-      match: (Host(`metrics.rvtr.net`) || Host(`mac.metrics.rvtr.net`)) && PathPrefix(`/`)
-      middlewares:
-        - name: rvtr-auth
-      priority: 10
-      services:
-        - kind: Service
-          name: prometheus
-          port: 9090
-  tls:
-    certResolver: cloudflare
-    domains:
-      - main: metrics.rvtr.net
-        sans:
-          - '*.metrics.rvtr.net'
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: zipkin
-spec:
-  entryPoints:
-    - tracing
-  routes:
-    - kind: Rule
-      match: (Host(`tracing.rvtr.net`) || Host(`mac.tracing.rvtr.net`)) && PathPrefix(`/`)
-      middlewares:
-        - name: rvtr-auth
-      priority: 10
-      services:
-        - kind: Service
-          name: zipkin
-          port: 9411
-  tls:
-    certResolver: cloudflare
-    domains:
-      - main: tracing.rvtr.net
-        sans:
-          - '*.tracing.rvtr.net'
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: traefik
-spec:
-  entryPoints:
-    - traefik
-  routes:
-    - kind: Rule
-      match: (Host(`traefik.rvtr.net`) || Host(`mac.traefik.rvtr.net`)) && PathPrefix(`/`)
-      middlewares:
-        - name: rvtr-auth
-      priority: 10
-      services:
-        - kind: TraefikService
-          name: api@internal
-  tls:
-    certResolver: cloudflare
-    domains:
-      - main: traefik.rvtr.net
-        sans:
-          - '*.traefik.rvtr.net'

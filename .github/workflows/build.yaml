@@ -1,25 +1,51 @@
 jobs:
-  validate:
+  build_aspnet:
+    defaults:
+      run:
+        working-directory: aspnet
+    name: build_aspnet
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: dotnet_restore
+        run: dotnet restore
+      - name: dotnet_build
+        run: dotnet build --no-restore
+
+  validate_hashicorp:
     defaults:
       run:
         working-directory: hashicorp
     name: validate_terraform
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: actions_checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v2.3.2
       - name: terraform_setup
-        uses: hashicorp/setup-terraform@v1.1.0
+        uses: hashicorp/setup-terraform@v1.2.0
         with:
-          terraform_version: 0.12.26
+          terraform_version: 0.13.2
       - name: terraform_init
         run: terraform init --backend=false
       - name: terraform_validate
         run: terraform validate
+
+  validate_helm:
+    defaults:
+      run:
+        working-directory: helm/rvtr
+    name: validate_helm
+    runs-on: ubuntu-20.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.3.2
+      - name: helm_lint
+        run: helm lint
 
 name: build
 
 on:
   pull_request:
     branches:
-      - master
+      - main

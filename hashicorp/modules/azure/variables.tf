@@ -12,10 +12,10 @@ variable "kubernetes_cluster" {
     node_resource_group = string
 
     default_node_pool = object({
-      max_pods        = number
-      name            = string
-      node_count      = number
-      vm_size         = string
+      max_pods   = number
+      name       = string
+      node_count = number
+      vm_size    = string
     })
 
     linux_profile = object({
@@ -38,5 +38,24 @@ variable "resource_group" {
   type = object({
     location = string
     name     = string
+  })
+}
+
+variable "storage_account" {
+  type = object({
+    name = string
+  })
+}
+
+variable "storage_container" {
+  type = object({
+    directories = list(string)
+  })
+}
+
+variable "storage_share" {
+  type = object({
+    name  = string
+    quota = number
   })
 }

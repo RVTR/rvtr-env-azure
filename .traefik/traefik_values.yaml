@@ -1,7 +1,6 @@
 additionalArguments:
-  - --certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
   - --certificatesresolvers.cloudflare.acme.dnschallenge=true
-  - --certificatesResolvers.cloudflare.acme.dnsChallenge.delayBeforeCheck=0
+  - --certificatesResolvers.cloudflare.acme.dnsChallenge.delayBeforeCheck=30
   - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
   - --certificatesresolvers.cloudflare.acme.email=howdy.rvtr@outlook.com
   - --certificatesresolvers.cloudflare.acme.storage=/data/acme.json
@@ -11,6 +10,7 @@ additionalArguments:
   - --tracing=true
   - --tracing.zipkin=true
   - --tracing.zipkin.httpEndpoint=http://zipkin:9411/api/v2/spans
+  - --tracing.zipkin.sameSpan=true
 
 affinity: {}
 
@@ -18,32 +18,49 @@ autoscaling:
   enabled: false
 
 deployment:
-  enabled: true
-  replicas: 1
+  additionalContainers: []
   annotations: {}
+  enabled: true
+  initContainers: []
   podAnnotations: {}
+  replicas: 1
 
 env: []
 
 envFrom:
   - secretRef:
-      name: rvtr-dns
+      name: rvtr-cloudflare
 
 globalArguments:
-  - '--global.checknewversion'
-  - '--global.sendanonymoususage'
+  - --global.checknewversion
+  - --global.sendanonymoususage
 
 hostNetwork: false
 
 image:
   name: traefik
-  tag: 2.2.1
+  pullPolicy: IfNotPresent
+  tag: 2.2.11
 
 ingressRoute:
   dashboard:
-    enabled: false
     annotations: {}
+    enabled: false
     labels: {}
+
+logs:
+  general:
+    level: ERROR
+  access:
+    enabled: false
+    filters: {}
+    fields:
+      general:
+        defaultmode: keep
+        names: {}
+      headers:
+        defaultmode: drop
+        names: {}
 
 nodeSelector: {}
 
@@ -54,46 +71,65 @@ persistence:
   path: /data
   annotations: {}
 
+podDisruptionBudget:
+  enabled: false
+
 podSecurityContext:
   fsGroup: 65532
 
 ports:
   analytics:
-    port: 3000
     expose: true
     exposedPort: 3000
+    port: 3000
+    protocol: TCP
   http:
-    port: 8000
     expose: true
     exposedPort: 80
+    port: 8000
+    protocol: TCP
   https:
-    port: 8443
     expose: true
     exposedPort: 443
+    port: 8443
+    protocol: TCP
   metrics:
-    port: 9090
     expose: true
     exposedPort: 9090
+    port: 9090
+    protocol: TCP
   tracing:
-    port: 9411
     expose: true
     exposedPort: 9411
+    port: 9411
+    protocol: TCP
   traefik:
-    port: 9000
     expose: true
     exposedPort: 9000
+    port: 9000
+    protocol: TCP
   web: null
   websecure: null
 
 priorityClassName: ''
+
+providers:
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: false
+    publishedService:
+      enabled: false
+
+rbac:
+  enabled: true
+  namespaced: false
 
 resources: {}
 
 rollingUpdate:
   maxUnavailable: 1
   maxSurge: 1
-
-tolerations: []
 
 securityContext:
   capabilities:
@@ -112,6 +148,11 @@ service:
   loadBalancerSourceRanges: []
   externalIPs: []
 
+serviceAccount:
+  name: ''
+
 serviceAccountAnnotations: {}
+
+tolerations: []
 
 volumes: []

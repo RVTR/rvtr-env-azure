@@ -9,8 +9,22 @@ spec:
       port: 3000
       targetPort: grafana-http
   selector:
-    app: rvtr-kernel
-  type: ClusterIP
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idaas
+spec:
+  ports:
+    - name: idaas
+      port: 80
+      targetPort: idaas-http
+  selector:
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
 
 ---
 apiVersion: v1
@@ -23,8 +37,8 @@ spec:
       port: 9090
       targetPort: prometheus-http
   selector:
-    app: rvtr-kernel
-  type: ClusterIP
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}
 
 ---
 apiVersion: v1
@@ -37,5 +51,5 @@ spec:
       port: 9411
       targetPort: zipkin-http
   selector:
-    app: rvtr-kernel
-  type: ClusterIP
+    app: {{ .Release.Name }}-kernel
+  type: {{ .Values.service.type }}

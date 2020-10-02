@@ -2,8 +2,9 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: rvtr-auth
+  name: idaas
 spec:
-  basicAuth:
-    removeHeader: false
-    secret: rvtr-auth
+  forwardAuth:
+    address: http://idaas/forward
+    authResponseHeaders:
+      - X-Forwarded-User

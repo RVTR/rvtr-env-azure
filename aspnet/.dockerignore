@@ -1,0 +1,9 @@
+# exclusions
+*
+
+# inclusions
+!**/RVTR*
+!**/*.cs
+!**/*.csproj
+!**/*.sln
+!**/appsettings.json
