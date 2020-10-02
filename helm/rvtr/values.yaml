@@ -1,58 +1,24 @@
-affinity: {}
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-
-fullnameOverride: ''
-
 image:
-  repository: nginx
   pullPolicy: Always
-  tag: latest
-
-imagePullSecrets: []
-
-ingress:
-  annotations: {}
-  enabled: false
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-
-nameOverride: ''
-
-nodeSelector: {}
-
-podAnnotations: {}
-
-podSecurityContext: {}
-
-replicaCount: 1
-
-resources: {}
 
 secrets:
   cloudflare: ''
 
-securityContext: {}
-
 service:
   type: ClusterIP
-  port: 80
-
-serviceAccount:
-  annotations: {}
-  create: true
-  name: ''
-
-tolerations: []
 
 variables:
+  grafana:
+    proxyAutoSignUp: 'true'
+    proxyEnabled: 'true'
+    proxyHeaderName: X-Forwarded-User
+    proxyHeaderProperty: username
   idaas:
     clientId: ''
     provider: ''
     redirectUri: ''
+
+volumes:
+  azure:
+    name: ''
+    storage: ''

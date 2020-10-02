@@ -20,14 +20,16 @@ spec:
     spec:
       containers:
         - env:
+            {{- with .Values.variables.grafana }}
             - name: GF_AUTH_PROXY_AUTO_SIGN_UP
-              value: 'true'
+              value: {{ .proxyAutoSignUp }}
             - name: GF_AUTH_PROXY_ENABLED
-              value: 'true'
+              value: {{ .proxyEnabled }}
             - name: GF_AUTH_PROXY_HEADER_NAME
-              value: X-Forwarded-User
+              value: {{ .proxyHeaderName }}
             - name: GF_AUTH_PROXY_HEADER_PROPERTY
-              value: username
+              value: {{ .proxyHeaderProperty }}
+            {{- end }}
           image: grafana/grafana
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: grafana
