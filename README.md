@@ -1,7 +1,7 @@
 # readme
 
-[![build status](https://github.com/fredbelotte/austin/workflows/build/badge.svg)](https://github.com/fredbelotte/austin/actions?query=workflow%3Abuild)
-[![release status](https://github.com/fredbelotte/austin/workflows/release/badge.svg)](https://github.com/fredbelotte/austin/actions?query=workflow%3Arelease)
+[![build status](https://github.com/rvtr/rvtr-ops-azure/workflows/build/badge.svg)](https://github.com/rvtr/rvtr-ops-azure/actions?query=workflow%3Abuild)
+[![release status](https://github.com/rvtr/rvtr-ops-azure/workflows/release/badge.svg)](https://github.com/rvtr/rvtr-ops-azure/actions?query=workflow%3Arelease)
 
 the provider repository
 
@@ -13,4 +13,4 @@ the provider repository
 
 The project is made available under the terms of the [MIT License][license_mit].
 
-[license_mit]: https://github.com/RVTR/rvtr-env-azure/blob/master/LICENSE 'mit license'
+[license_mit]: https://github.com/rvtr/rvtr-ops-azure/blob/master/LICENSE 'mit license'
