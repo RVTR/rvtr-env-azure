@@ -5,6 +5,7 @@ variable "azure_public_ip" {}
 variable "azure_resource_group" {}
 variable "azure_storage_account" {}
 variable "azure_storage_container" {}
+variable "azure_storage_share" {}
 
 # cloudflare
 variable "cloudflare_record_name" {}

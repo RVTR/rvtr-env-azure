@@ -69,7 +69,7 @@ resource "azurerm_resource_group" "rvtr" {
 
 resource "azurerm_storage_account" "rvtr" {
   access_tier               = "Hot"
-  account_kind              = var.storage_account.kind
+  account_kind              = "StorageV2"
   account_replication_type  = "LRS"
   account_tier              = "Standard"
   allow_blob_public_access  = true
@@ -89,6 +89,12 @@ resource "azurerm_storage_container" "rvtr" {
   container_access_type = "blob"
   name                  = each.key
   storage_account_name  = azurerm_storage_account.rvtr.name
+}
+
+resource "azurerm_storage_share" "rvtr" {
+  name                 = var.storage_share.name
+  quota                = var.storage_share.quota
+  storage_account_name = azurerm_storage_account.rvtr.name
 }
 
 resource "random_pet" "rvtr" {

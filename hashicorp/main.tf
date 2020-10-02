@@ -5,8 +5,9 @@ module "azure" {
   kubernetes_cluster     = var.azure_kubernetes_cluster
   public_ip              = var.azure_public_ip
   resource_group         = var.azure_resource_group
-  storage_account = var.azure_storage_account
-  storage_container = var.azure_storage_container
+  storage_account        = var.azure_storage_account
+  storage_container      = var.azure_storage_container
+  storage_share          = var.azure_storage_share
 }
 
 module "cloudflare" {
